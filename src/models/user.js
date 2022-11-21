@@ -4,11 +4,14 @@ export const userSchema = new mongoose.Schema({
     name: { type: String },
     email: { type: String, require: true },
     password: { type: String, require: true },
-    birthDate: { type: String, require: true },
-    //role: {type: String, enum: ["school-admin", "teacher", "student","particular"], require: true},
-},
-    {
-        timestamps: true
-    });
+    birthDate: { type: String, require: true },     //Tendria que ser type: Date, hay que ver como trabajar con fechas.
+    //role: {type: String, enum: ["user", "admin"]},
+    updated: {type: Date, default: Date.now()},
+    created: {type: Date, default: Date.now()}, 
+});
 
-export default userSchema
+
+//Para usar TS hay que crear una interfaz de "UserModel" con los tipos TS del Schema. Por ahora esta en JS para probar.
+
+export const User = mongoose.model('users', userSchema);
+
