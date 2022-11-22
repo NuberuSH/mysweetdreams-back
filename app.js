@@ -1,10 +1,9 @@
 import express from "express";
 import usersRoutes from "./src/routes/users.js"
 import cors from "cors";
-import dbConnection from "./src/connection.js";
+import startDatabase from "./src/connection.js";
 
 
-const app = express();
 const allowList = ["https://mysweetdreams.es","https://app.mysweetdreams.es"];
 
 const corsOptions = {
@@ -13,34 +12,41 @@ const corsOptions = {
     methods: "HET,HEAD,PUT,PATCH,POST,DELETE",
     
     credentials: true,
-
+    
     // exposedHeaders: [
-
-    //     "x-auth-token",
-    
-    //     "content-type",
-    
-    //     "X-Requested-With",
-    
-    //     "Authorization",
-    
-    //     "Accept",
-    
-    //     "Origin",
-    //   ]
+        
+        //     "x-auth-token",
+        
+        //     "content-type",
+        
+        //     "X-Requested-With",
+        
+        //     "Authorization",
+        
+        //     "Accept",
+        
+        //     "Origin",
+        //   ]
 }
+    
 
-if(dbConnection.on){
+const app = express();
+const configureExpress = async () => {
     app.use(cors(corsOptions));
     app.use(express.json());
     app.use("/users", usersRoutes);
-    
-    
-    const port = 3000;
-    app.listen(port, () => {
+};
+
+
+
+const startAplication = async () => {
+    await startDatabase();
+    await configureExpress();
+    app.listen(3000, () => {
         console.log("Conectado en el puerto 3000");
     });
-}
+}; 
 
+startAplication();
 
 

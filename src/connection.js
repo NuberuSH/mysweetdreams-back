@@ -16,4 +16,4 @@ const startDatabase = () => {
 
 
 
-export default startDatabase
+export default startDatabase;
