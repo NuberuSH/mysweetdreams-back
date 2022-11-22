@@ -1,10 +1,11 @@
-import { express } from "express";
-const router = express.router();
+import express from "express";
+import userController from "../controllers/user.js";
+const router = express.Router();
 //USUARIOS
 //Login
-router.post("/add", userController.postUser());
-router.get("/", userController.getUser());
-router.patch("/", userController.updateUser());
-router.delete("/:userID", userController.deleteUser());
+router.post("/add", userController.postUser);
+router.get("/", userController.getUser);
+//router.patch("/", userController.updateUser);
+router.delete("/:userID", userController.deleteUser);
 
-export { router };
+export default router;

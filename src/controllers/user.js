@@ -1,4 +1,4 @@
-import { User } from './models/user.js';
+import { User } from '../models/user.js';
 
 const controller = {};
 
@@ -24,7 +24,7 @@ controller.postUser = async (req, res) => {
         return;
     }
 
-    post(newUser);
+    newUser.save();
     res.status(200).json(get());    //Carefull, Im returning all the users from de database for test
     return;
 }
@@ -51,3 +51,6 @@ async function destroy(userID) {
 async function patch() {
 
 };
+
+
+export default controller;

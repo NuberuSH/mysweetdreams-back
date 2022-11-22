@@ -12,7 +12,6 @@ mongoose.connect(MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true },
     }
 })
 
-
 function fillDatabaseTest(){
     let user1 = new User({name: "Eduardo",
                         email: "edu123@gmail.com",
@@ -30,5 +29,6 @@ function fillDatabaseTest(){
 
         
 }
-
 //fillDatabaseTest();
+
+//export default connection

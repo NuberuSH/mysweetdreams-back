@@ -1,7 +1,7 @@
-import { express } from "express";
-import { usersRoutes } from "./src/routes/users.js"
-import { cors } from "cors";
-import { connection } from "mongoose";
+import express from "express";
+import usersRoutes from "./src/routes/users.js"
+import cors from "cors";
+import connectionDatabase from "./src/connection.js";
 
 
 const app = express();
@@ -35,7 +35,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/users", usersRoutes);
 
-connection.then(() => {
+connectionDatabase.then(() => {
 
     const port = 3000;
     app.listen(port, () => {
