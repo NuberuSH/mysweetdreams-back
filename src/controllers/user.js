@@ -57,5 +57,24 @@ controller.deleteUser = async (req, res) => {
     }
 };
 
+controller.updateUserById = async (req, res) => {
+    const filter = {
+        userID : req.params.userID
+    };
+
+    const update = {
+        name : req.body.name,
+        age: req.body.age,
+        birthdate: req.body.birthdate,              
+    };
+
+    User.findOneAndUpdate(filter, update, function(err){
+        if(err){
+            res.status(400).send("error");
+        }else{
+            res.status(200).send("OK");
+        }
+    });
+}
 
 export default controller;
