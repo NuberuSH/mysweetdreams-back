@@ -2,6 +2,8 @@ import { User } from '../models/user.js';
 
 const controller = {};
 
+const emailValidator = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
+
 controller.getUsers = async (req, res) => {
     try{
         const users = await User.find({});
@@ -36,7 +38,7 @@ controller.postUser = async (req, res) => {
         res.status(400).send("Incorrect mail");
         return;
     }
-    if (!newUser.password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/)) {
+    if (!newUser.password.match(emailValidator)) {
         res.status(400).send("Invalid pass");
         return;
     }
@@ -64,7 +66,7 @@ controller.updateUserById = async (req, res) => {
 
     const update = {
         name : req.body.name,
-        age: req.body.age,
+        email : req.body.email,
         birthdate: req.body.birthdate,              
     };
 
