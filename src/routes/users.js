@@ -1,8 +1,10 @@
 import { express } from "express";
-
+const router = express.router();
 //USUARIOS
 //Login
-express.router.post("/", userController.postUser());
-express.router.get("/", userController.getUser());
-express.router.patch("/", userController.updateUser());
-express.router.delete("/", userController.deleteUser());
+router.post("/add", userController.postUser());
+router.get("/", userController.getUser());
+router.patch("/", userController.updateUser());
+router.delete("/:userID", userController.deleteUser());
+
+export { router };

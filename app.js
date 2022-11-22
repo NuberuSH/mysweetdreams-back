@@ -1,5 +1,7 @@
 import { express } from "express";
+import { usersRoutes } from "./src/routes/users.js"
 import { cors } from "cors";
+import { connection } from "mongoose";
 
 
 const app = express();
@@ -31,9 +33,14 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(routes);
+app.use("/users", usersRoutes);
 
+connection.then(() => {
 
-app.listen(3000, () => {
-    console.log("Conectado en el puerto 3000");
+    const port = 3000;
+    app.listen(port, () => {
+        console.log("Conectado en el puerto 3000");
+    });
+
 });
+
