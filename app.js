@@ -1,7 +1,7 @@
 import express from "express";
 import usersRoutes from "./src/routes/users.js"
 import cors from "cors";
-import connectionDatabase from "./src/connection.js";
+import dbConnection from "./src/connection.js";
 
 
 const app = express();
@@ -30,17 +30,17 @@ const corsOptions = {
     //   ]
 }
 
-
-app.use(cors(corsOptions));
-app.use(express.json());
-app.use("/users", usersRoutes);
-
-connectionDatabase.then(() => {
-
+if(dbConnection.on){
+    app.use(cors(corsOptions));
+    app.use(express.json());
+    app.use("/users", usersRoutes);
+    
+    
     const port = 3000;
     app.listen(port, () => {
         console.log("Conectado en el puerto 3000");
     });
+}
 
-});
+
 
