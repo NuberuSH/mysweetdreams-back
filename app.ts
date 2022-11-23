@@ -4,9 +4,9 @@ import cors from "cors";
 import startDatabase from "./src/connection.js";
 
 
-const allowList = ["https://mysweetdreams.es", "https://app.mysweetdreams.es"];
+const allowList: string[] = ["https://mysweetdreams.es", "https://app.mysweetdreams.es"];
 
-const corsOptions = {
+const corsOptions: cors.CorsOptions = {
     origin: true,
     optionsSuccessStatus: 200,
     methods: "HET,HEAD,PUT,PATCH,POST,DELETE",
@@ -31,20 +31,22 @@ const corsOptions = {
 
 
 const app = express();
-const configureExpress = async () => {
+const configureExpress = async (): Promise<void> => {
     app.use(cors(corsOptions));
     app.use(express.json());
     app.use("/users", usersRoutes);
+    return;
 };
 
 
 
-const startAplication = async () => {
+const startAplication = async (): Promise<void> => {
     await startDatabase();
     await configureExpress();
     app.listen(3000, () => {
         console.log("Conectado en el puerto 3000");
     });
+    return;
 };
 
 startAplication();

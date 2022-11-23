@@ -1,12 +1,14 @@
-import express from "express";
+import { Router } from "express";
 import userController from "../controllers/user.js";
 
 
-const router = express.Router();
+const router: Router = Router();
 
 
 //USUARIOS
 //Login
+
+
 router.get("/", userController.getUsers);
 router.get("/:userID", userController.getUserById);
 

@@ -1,11 +1,12 @@
+import { Request, Response } from 'express';
 import { User } from '../models/user.js';
 
-const controller = {};
+const controller: any = {}; //He puesto any porque si no me decia que "getUsers property does not exist on type {}"
 
-const emailValidator = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-const passValidator = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
+const emailValidator: RegExp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+const passValidator: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
 
-controller.getUsers = async (req, res) => {
+controller.getUsers = async (req: Request, res: Response): Promise<void> => {
     try{
         const users = await User.find({});
         res.status(200).json(users);
@@ -16,7 +17,7 @@ controller.getUsers = async (req, res) => {
     }
 };
 
-controller.getUserById = async (req, res) => {
+controller.getUserById = async (req: Request, res: Response): Promise<void> => {
     try{
         const userID = req.params.userID;
         const user = await User.findById(userID);
@@ -27,7 +28,7 @@ controller.getUserById = async (req, res) => {
 
 }
 
-controller.postUser = async (req, res) => {
+controller.postUser = async (req: Request, res: Response): Promise<void> => {
     const newUser = new User({...req.body});
 
     if(!newUser.email || !newUser.password || !newUser.birthdate){
@@ -49,7 +50,7 @@ controller.postUser = async (req, res) => {
     return;
 };
 
-controller.deleteUser = async (req, res) => {
+controller.deleteUser = async (req: Request, res: Response): Promise<void> => {
     const userID = req.params.userID;
     try{
         await User.findByIdAndRemove(userID)
@@ -60,7 +61,7 @@ controller.deleteUser = async (req, res) => {
     }
 };
 
-controller.updateUserById = async (req, res) => {
+controller.updateUserById = async (req: Request, res: Response): Promise<void> => {
     const filter = {
         userID : req.params.userID
     };
@@ -71,7 +72,7 @@ controller.updateUserById = async (req, res) => {
         birthdate: new Date(req.body.birthdate),              
     };
 
-    User.findOneAndUpdate(filter, update, function(err){
+    User.findOneAndUpdate(filter, update, function(err: Error){
         if(err){
             res.status(400).send("error");
         }else{
