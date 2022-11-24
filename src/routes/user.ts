@@ -1,5 +1,5 @@
-import { Router } from "express";
-import userController from "../controllers/user.js";
+import { Router } from 'express';
+import userController from '../controllers/user.js';
 
 
 const router: Router = Router();
@@ -9,13 +9,13 @@ const router: Router = Router();
 //Login
 
 
-router.get("/", userController.getUsers);
-router.get("/:userID", userController.getUserById);
+router.get('/', userController.getUsers);
+router.get('/:userID', userController.getUserById);
 
-router.post("/add", userController.postUser);
+router.post('/add', userController.postUser);
 
-router.patch("/:userID", userController.updateUserById);
+router.patch('/:userID', userController.updateUserById);
 
-router.delete("/:userID", userController.deleteUser);
+router.delete('/:userID', userController.deleteUser);
 
 export default router;

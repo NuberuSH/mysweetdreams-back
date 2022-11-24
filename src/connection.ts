@@ -1,20 +1,16 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 
 const MONGO_URL = 'mongodb://127.0.0.1:27017/sd-bd';
 
 
-const startDatabase = (): void => {
-    mongoose.connect(MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true }, (err: Error) => {
-        if (err) {
-            console.log("Error de conexión con la bd")
-        }
-        else {
-            console.log("Conexión con la bd correcta")
-        }
-    });
-    return;
+const startDatabase = async (): Promise<void> => {
+  try {
+    await mongoose.connect(MONGO_URL);
+    console.log('Succesfully conected to database');
+  } catch (error){
+    console.log('Error conecting to database');
+  }
 };
-
 
 
 export default startDatabase;

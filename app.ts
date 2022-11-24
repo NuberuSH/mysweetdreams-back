@@ -1,52 +1,51 @@
-import express from "express";
-import usersRoutes from "./src/routes/user"
-import cors from "cors";
-import startDatabase from "./src/connection.js";
+import express from 'express';
+import usersRoutes from './src/routes/user.js';
+import cors from 'cors';
+import startDatabase from './src/connection.js';
 
 
-const allowList: string[] = ["https://mysweetdreams.es", "https://app.mysweetdreams.es"];
+const allowList: string[] = ['https://mysweetdreams.es', 'https://app.mysweetdreams.es'];
 
 const corsOptions: cors.CorsOptions = {
-    origin: true,
-    optionsSuccessStatus: 200,
-    methods: "HET,HEAD,PUT,PATCH,POST,DELETE",
+  origin: true,
+  optionsSuccessStatus: 200,
+  methods: 'HET,HEAD,PUT,PATCH,POST,DELETE',
 
-    credentials: true,
+  credentials: true
 
-    // exposedHeaders: [
+  // exposedHeaders: [
 
-    //     "x-auth-token",
+  //     "x-auth-token",
 
-    //     "content-type",
+  //     "content-type",
 
-    //     "X-Requested-With",
+  //     "X-Requested-With",
 
-    //     "Authorization",
+  //     "Authorization",
 
-    //     "Accept",
+  //     "Accept",
 
-    //     "Origin",
-    //   ]
-}
+  //     "Origin",
+  //   ]
+};
 
 
 const app = express();
 const configureExpress = async (): Promise<void> => {
-    app.use(cors(corsOptions));
-    app.use(express.json());
-    app.use("/users", usersRoutes);
-    return;
+  app.use(cors(corsOptions));
+  app.use(express.json());
+  app.use('/users', usersRoutes);
+  return;
 };
 
 
-
 const startAplication = async (): Promise<void> => {
-    await startDatabase();
-    await configureExpress();
-    app.listen(3000, () => {
-        console.log("Conectado en el puerto 3000");
-    });
-    return;
+  await startDatabase();
+  await configureExpress();
+  app.listen(3000, () => {
+    console.log('Conectado en el puerto 3000');
+  });
+  return;
 };
 
 startAplication();
