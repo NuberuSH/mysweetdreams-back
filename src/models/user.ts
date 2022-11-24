@@ -1,17 +1,23 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema, Document, Model, model } from 'mongoose';
 
-const userSchema = new mongoose.Schema({
-    name: { type: String },
-    email: { type: String, require: true },
-    password: { type: String, require: true },
-    birthdate: { type: Date, require: true },     //Tendria que ser type: Date, hay que ver como trabajar con fechas.
-    //role: {type: String, enum: ["user", "admin"]},
-    updated: {type: Date, default: Date.now()},
-    created: {type: Date, default: Date.now()}, 
+const userSchema: Schema = new Schema({
+  name: { type: String },
+  email: { type: String, require: true },
+  password: { type: String, require: true },
+  birthdate: { type: Date, require: true }, 
+  //role: {type: String, enum: ["user", "admin"]},
+  updated: { type: Date, default: Date.now() },
+  created: { type: Date, default: Date.now() } 
 });
 
+export interface UserModel extends Document {
+        name: string,
+        email: string,
+        password: string,
+        birthdate: Date,
+        updated: Date,
+        created: Date
+}
 
-//Para usar TS hay que crear una interfaz de "UserModel" con los tipos TS del Schema. Por ahora esta en JS para probar.
 
-export const User = mongoose.model('users', userSchema);
-
+export const User: Model<UserModel> = model<UserModel>('users', userSchema); 
