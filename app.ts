@@ -1,7 +1,7 @@
 import express from 'express';
-import usersRoutes from './src/routes/user.js';
+import usersRoutes from './src/routes/user';
 import cors from 'cors';
-import startDatabase from './src/connection.js';
+import startDatabase from './src/connection';
 
 
 const allowList: string[] = ['https://mysweetdreams.es', 'https://app.mysweetdreams.es'];
