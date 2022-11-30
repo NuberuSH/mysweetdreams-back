@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
 import { User } from '../models/user.js';
-import { addNewUser } from '../services/user.js';
+import { addNewUser, findAllUsers, findUserById } from '../services/user.js';
 
-const controller: any = {}; //He puesto any porque si no me decia que "getUsers property does not exist on type {}"
+const controller: any = {}; //He puesto any porque si no me decia que "getUsers property does not exist on type {}" , habria que poner una interfaz?
 
 
 controller.getUsers = async (req: Request, res: Response): Promise<void> => {
   try {
+    //const users = await findAllUsers(User.find);
     const users = await User.find({});
     res.status(200).json(users);
     return;
@@ -29,7 +30,8 @@ controller.getUserById = async (req: Request, res: Response): Promise<void> => {
 controller.postUser = async (req: Request, res: Response): Promise<void> => {
   const newUser = new User({ ...req.body });
   try {
-    addNewUser(newUser, newUser.save());
+    //await addNewUser(newUser, User.find);
+    await newUser.save();
     res.status(200).send('OK');
     return;
   } catch (err) {
