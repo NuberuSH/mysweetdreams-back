@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, Model, model } from 'mongoose';
+import { Schema, Document, Model, model } from 'mongoose';
 
 const userSchema: Schema = new Schema({
   name: { 
@@ -14,8 +14,8 @@ const userSchema: Schema = new Schema({
     require: true
   },
   birthdate: {
-    type: Date,
-    require: true 
+    type: Date
+    //require: true 
   }, 
   //role: {type: String, enum: ["user", "admin"]},
   updated: {
@@ -32,7 +32,7 @@ export interface UserModel extends Document {
         name?: string,
         email: string,
         password: string,
-        birthdate: Date,
+        birthdate?: Date,
         updated?: Date,
         created?: Date
 }

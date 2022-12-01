@@ -13,6 +13,7 @@ router.get('/', userController.getUsers);
 router.get('/:userID', userController.getUserById);
 
 router.post('/add', userController.postUser);
+router.post('/authenticate', userController.authenticateUser);
 
 router.patch('/:userID', userController.updateUserById);
 
