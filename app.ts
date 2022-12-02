@@ -9,7 +9,7 @@ const allowList: string[] = ['https://mysweetdreams.es', 'https://app.mysweetdre
 const corsOptions: cors.CorsOptions = {
   origin: true,
   optionsSuccessStatus: 200,
-  methods: 'HET,HEAD,PUT,PATCH,POST,DELETE',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 
   credentials: true
 
@@ -33,6 +33,7 @@ const corsOptions: cors.CorsOptions = {
 const app = express();
 const configureExpress = async (): Promise<void> => {
   app.use(cors(corsOptions));
+  app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   app.use('/users', usersRoutes);
   return;

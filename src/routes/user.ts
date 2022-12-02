@@ -17,6 +17,6 @@ router.post('/authenticate', userController.authenticateUser);
 
 router.patch('/:userID', userController.updateUserById);
 
-router.delete('/:userID', userController.deleteUser);
+router.delete('/:userID', userController.deleteUserById);
 
 export default router;

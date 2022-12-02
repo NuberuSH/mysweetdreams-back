@@ -32,7 +32,7 @@ export const deleteUserById = async (Id: string, repository: UserRepository) => 
   if (!Id){
     throw new Error('Id is missing');
   }
-  const deletedUser = repository.deleteUserById(Id);
+  const deletedUser = await repository.deleteUserById(Id);
   if (!deletedUser){
     return 'User to delete not found';
   } else {
@@ -41,9 +41,8 @@ export const deleteUserById = async (Id: string, repository: UserRepository) => 
 };
 
 export const authenticateUser = async (user: any, repository: UserRepository): Promise<boolean> => {
-  console.log(user);
   const userFound = await repository.findUserByEmail(user.email);
-  if (!userFound){
+  if (userFound.length === 0){
     return false;
   }
   if (user.password === userFound[0].password){
@@ -51,15 +50,3 @@ export const authenticateUser = async (user: any, repository: UserRepository): P
   }
   return false;
 };
-
-// export const autheticate = async (email: string, repository: UserRepository) => {
-//   if (!email){
-//     throw new Error('Email is missing');
-//   }
-//   const user = repository.findUserByEmail(email);
-//   console.log('sale del repository');
-//   if (!user){
-//     return 'User not found';
-//   }
-//   return user;
-// };
