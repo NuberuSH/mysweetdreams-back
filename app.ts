@@ -1,7 +1,7 @@
 import express from 'express';
-import usersRoutes from './src/routes/user.js';
+import usersRoutes from './src/routes/user';
 import cors from 'cors';
-import startDatabase from './src/connection.js';
+import startDatabase from './src/connection';
 
 
 const allowList: string[] = ['https://mysweetdreams.es', 'https://app.mysweetdreams.es'];
@@ -9,7 +9,7 @@ const allowList: string[] = ['https://mysweetdreams.es', 'https://app.mysweetdre
 const corsOptions: cors.CorsOptions = {
   origin: true,
   optionsSuccessStatus: 200,
-  methods: 'HET,HEAD,PUT,PATCH,POST,DELETE',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 
   credentials: true
 
@@ -33,6 +33,7 @@ const corsOptions: cors.CorsOptions = {
 const app = express();
 const configureExpress = async (): Promise<void> => {
   app.use(cors(corsOptions));
+  app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   app.use('/users', usersRoutes);
   return;

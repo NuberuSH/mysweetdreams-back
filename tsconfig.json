@@ -29,7 +29,7 @@
     // "useDefineForClassFields": true,                  /* Emit ECMAScript-standard-compliant class fields. */
 
     /* Modules */
-    "module": "es6",
+    "module": "CommonJS",
     /* Specify what module code is generated. */
     "rootDir": "./",
     /* Specify the root folder within your source files. */
