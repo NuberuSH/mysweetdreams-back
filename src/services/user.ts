@@ -1,14 +1,15 @@
 import { UserModel } from '../models/user';
 import { UserRepository } from '../repository/userRepository';
+import { UpdateFilter, UpdateData } from '../controllers/user';
 
-export const addNewUser = async (newUser: any, repository: UserRepository) => {
+export const addNewUser = async (newUser: any, repository: UserRepository): Promise<UserModel | string> => {
 
   const createdUser = await repository.addNewUser(newUser);
   return createdUser;
   
 };
 
-export const findAllUsers = async (repository: UserRepository) => {
+export const findAllUsers = async (repository: UserRepository): Promise<UserModel[] | null> => {
   if (!repository){
     throw new Error('Missing parameters');
   }
@@ -49,4 +50,14 @@ export const authenticateUser = async (user: any, repository: UserRepository): P
     return true;
   }
   return false;
+};
+
+export const updateUser = async (filter: UpdateFilter, data: UpdateData, repository: UserRepository): Promise<UserModel | string> => {
+  const updatedUser = await repository.updateUser(filter, data);
+  if (updatedUser === null){
+    return 'User not found';
+  } else {
+    return updatedUser;
+  }
+
 };

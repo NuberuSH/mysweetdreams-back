@@ -4,21 +4,19 @@
 import { Request, Response } from 'express';
 import { User } from '../models/user';
 import { UserRepositoryMongo } from '../repository/userRepository';
-import { addNewUser, findAllUsers, findUserById, deleteUserById, authenticateUser } from '../services/user';
+import { addNewUser, findAllUsers, findUserById, deleteUserById, authenticateUser, updateUser } from '../services/user';
+import bcryptjs from 'bcryptjs';
+import isValidId from '../scripts/checkId';
 
 const controller: any = {}; //He puesto any porque si no me decia que "getUsers property does not exist on type {}" , habria que poner una interfaz
 
 const emailValidator: RegExp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const passValidator: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
 
-const isValidId = (id: string) => {
-  return id.length === 24;
-};
 
-
-controller.getUsers = async (req: Request, res: Response): Promise<void> => {
+controller.getAll = async (req: Request, res: Response): Promise<void> => {
+  const userRepository = new UserRepositoryMongo();
   try {
-    const userRepository = new UserRepositoryMongo();
     const users = await findAllUsers(userRepository);
     res.status(200).json(users);
     return;
@@ -28,7 +26,7 @@ controller.getUsers = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-controller.authenticateUser = async (req: Request, res: Response): Promise<void> => {
+controller.authenticate = async (req: Request, res: Response): Promise<void> => {
   try {
     const userRepository = new UserRepositoryMongo();
     const isAutheticated = await authenticateUser(req.body, userRepository);
@@ -43,16 +41,15 @@ controller.authenticateUser = async (req: Request, res: Response): Promise<void>
   }
 };
 
-//TODO Comprobar que el id sea de 24 caracteres
-controller.getUserById = async (req: Request, res: Response): Promise<void> => {
-  const userID = req.params.userID;
-  if (!isValidId(userID)){
+controller.getById = async (req: Request, res: Response): Promise<void> => {
+  const userId = req.params.userId;
+  if (!isValidId(userId)){
     res.status(400).send('Invalid user ID');
     return;
   }
   try {
     const userRepository = new UserRepositoryMongo();
-    const user = await findUserById(userID, userRepository);
+    const user = await findUserById(userId, userRepository);
     
     res.status(200).json(user);
   } catch (err) {
@@ -60,10 +57,9 @@ controller.getUserById = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-controller.postUser = async (req: Request, res: Response): Promise<void> => {
+controller.add = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = new User(req.body);
-
     if (!user){
       res.status(400).send('Missing user');
       return;
@@ -81,6 +77,9 @@ controller.postUser = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    
+    //user.password = await bcryptjs.hash(user.password, 8);
+
     const userRepository = new UserRepositoryMongo();
     const addedUser = await addNewUser(user, userRepository);
     if (addedUser === 'User already exists' || addedUser === 'Unexpected error'){
@@ -95,16 +94,15 @@ controller.postUser = async (req: Request, res: Response): Promise<void> => {
 };
 
 
-//TODO Comprobar que el id sea de 24 caracteres
-controller.deleteUserById = async (req: Request, res: Response): Promise<void> => {
+controller.deleteById = async (req: Request, res: Response): Promise<void> => {
   const userRepository = new UserRepositoryMongo();
-  const userID = req.params.userID;
-  if (!isValidId(userID)){
+  const userId = req.params.userId;
+  if (!isValidId(userId)){
     res.status(400).send('Invalid user ID');
     return;
   }
   try {
-    const deletedUser = await deleteUserById(userID, userRepository);
+    const deletedUser = await deleteUserById(userId, userRepository);
     if (deletedUser === 'User to delete not found'){
       res.status(400).send('User doesn\'t exists');
       return;
@@ -117,25 +115,47 @@ controller.deleteUserById = async (req: Request, res: Response): Promise<void> =
   }
 };
 
-//TODO
-controller.updateUserById = async (req: Request, res: Response): Promise<void> => {
-  const filter = {
-    userID: req.params.userID
+
+export interface UpdateFilter {
+  userId: string
+}
+
+export interface UpdateData {
+  name: string,
+  email: string,
+  birthdate: Date
+}
+
+controller.updateById = async (req: Request, res: Response): Promise<void> => {
+  const userRepository = new UserRepositoryMongo();
+  const userId = req.params.userId;
+  if (!isValidId(userId)){
+    res.status(400).send('Invalid user ID');
+    return;
+  }
+
+  const filter: UpdateFilter = {
+    userId
   };
 
-  const update = {
+  const data: UpdateData = {
     name: req.body.name,
     email: req.body.email,
     birthdate: new Date(req.body.birthdate)              
   };
 
-  User.findOneAndUpdate(filter, update, function (err: Error){
-    if (err){
-      res.status(400).send('error');
+  try {
+    const updatedUser = await updateUser(filter, data, userRepository);
+    if (updatedUser == 'User not found') {
+      res.status(400).send('User not found');
+      return;
     } else {
-      res.status(200).send('OK');
+      res.status(200).send('Ok');
+      return;
     }
-  });
+  } catch (err) {
+    res.status(500).send('Error updating user');
+  }
 };
 
 export default controller;

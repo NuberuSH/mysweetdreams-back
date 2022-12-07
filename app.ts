@@ -1,5 +1,6 @@
 import express from 'express';
 import usersRoutes from './src/routes/user';
+import sleepDataRoutes from './src/routes/sleepData';
 import cors from 'cors';
 import startDatabase from './src/connection';
 
@@ -36,6 +37,7 @@ const configureExpress = async (): Promise<void> => {
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   app.use('/users', usersRoutes);
+  app.use('/data', sleepDataRoutes);
   return;
 };
 

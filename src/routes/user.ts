@@ -9,14 +9,14 @@ const router: Router = Router();
 //Login
 
 
-router.get('/', userController.getUsers);
-router.get('/:userID', userController.getUserById);
+router.get('/', userController.getAll);
+router.get('/:userId', userController.getById);
 
-router.post('/add', userController.postUser);
-router.post('/authenticate', userController.authenticateUser);
+router.post('/add', userController.add);
+router.post('/authenticate', userController.authenticate);
 
-router.patch('/:userID', userController.updateUserById);
+router.patch('/:userId', userController.updateById);
 
-router.delete('/:userID', userController.deleteUserById);
+router.delete('/:userId', userController.deleteById);
 
 export default router;

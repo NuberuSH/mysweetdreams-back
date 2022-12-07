@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document, Model, model } from 'mongoose';
 
 const sleepDataSchema: Schema = new Schema({
-  user: {
+  userId: {
     type: mongoose.Types.ObjectId,
     require: true
   },
@@ -37,14 +37,14 @@ const sleepDataSchema: Schema = new Schema({
 });
 
 export interface SleepDataModel extends Document {
-    user: mongoose.Types.ObjectId,
+    userId: mongoose.Types.ObjectId,
     day: Date,
     start: Date,
     end: Date,
     mark: number,
     timesAwakened: number,
     restfulSleep: boolean,
-    notes: string
+    notes?: string
 }
 
 
