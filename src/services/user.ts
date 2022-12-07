@@ -41,13 +41,16 @@ export const deleteUserById = async (Id: string, repository: UserRepository) => 
   }
 };
 
-export const authenticateUser = async (user: any, repository: UserRepository): Promise<boolean> => {
+export const authenticateUser = async (user: any, repository: UserRepository): Promise<any> => {
   const userFound = await repository.findUserByEmail(user.email);
   if (userFound.length === 0){
     return false;
   }
   if (user.password === userFound[0].password){
-    return true;
+    return {
+      userId: userFound[0]._id,
+      message: 'Ok'
+    };
   }
   return false;
 };

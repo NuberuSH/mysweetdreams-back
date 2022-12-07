@@ -29,9 +29,9 @@ controller.getAll = async (req: Request, res: Response): Promise<void> => {
 controller.authenticate = async (req: Request, res: Response): Promise<void> => {
   try {
     const userRepository = new UserRepositoryMongo();
-    const isAutheticated = await authenticateUser(req.body, userRepository);
-    if (isAutheticated){
-      res.status(200).send('Ok');
+    const autheticated = await authenticateUser(req.body, userRepository);
+    if (autheticated){
+      res.status(200).json(autheticated);
     } else {
       res.status(400).send('Invalid user/password');
     }
