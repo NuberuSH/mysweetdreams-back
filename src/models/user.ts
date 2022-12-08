@@ -4,6 +4,9 @@ const userSchema: Schema = new Schema({
   name: { 
     type: String
   },
+  lastName: { 
+    type: String
+  },
   email: { 
     type: String,
     require: true,
@@ -17,6 +20,10 @@ const userSchema: Schema = new Schema({
     type: Date
     //require: true 
   }, 
+  profilePic: {
+    type: String,
+    default: 'default.png'
+  },
   //role: {type: String, enum: ["user", "admin"]},
   updated: {
     type: Date,

@@ -43,6 +43,6 @@ export class UserRepositoryMongo implements UserRepository{
   }
 
   public async updateUser(filter: UpdateFilter, update: UpdateData): Promise<UserModel | null>{
-    return User.findOneAndUpdate(filter, update, { new: true });
+    return User.findOneAndUpdate(filter, update, { new: true });   
   }
 }

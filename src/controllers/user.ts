@@ -117,12 +117,13 @@ controller.deleteById = async (req: Request, res: Response): Promise<void> => {
 
 
 export interface UpdateFilter {
-  userId: string
+  _id: string
 }
 
 export interface UpdateData {
   name: string,
-  email: string,
+  lastName: string,
+  profilePic: string,
   birthdate: Date
 }
 
@@ -135,21 +136,23 @@ controller.updateById = async (req: Request, res: Response): Promise<void> => {
   }
 
   const filter: UpdateFilter = {
-    userId
+    '_id': userId
   };
 
   const data: UpdateData = {
     name: req.body.name,
-    email: req.body.email,
+    lastName: req.body.lastName,
+    profilePic: req.body.profilePic,
     birthdate: new Date(req.body.birthdate)              
   };
 
   try {
     const updatedUser = await updateUser(filter, data, userRepository);
+    
     if (updatedUser == 'User not found') {
       res.status(400).send('User not found');
       return;
-    } else {
+    } else {   
       res.status(200).send('Ok');
       return;
     }
