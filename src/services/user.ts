@@ -59,7 +59,7 @@ export const updateUser = async (filter: UpdateFilter, data: UpdateData, reposit
   const updatedUser = await repository.updateUser(filter, data);
   if (updatedUser === null){
     return 'User not found';
-  } else {
+  } else {    
     return updatedUser;
   }
 
