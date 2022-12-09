@@ -120,13 +120,6 @@ export interface UpdateFilter {
   _id: string
 }
 
-export interface UpdateData {
-  name: string,
-  lastName: string,
-  profilePic: string,
-  birthdate: Date
-}
-
 controller.updateById = async (req: Request, res: Response): Promise<void> => {
   const userRepository = new UserRepositoryMongo();
   const userId = req.params.userId;
@@ -139,12 +132,9 @@ controller.updateById = async (req: Request, res: Response): Promise<void> => {
     '_id': userId
   };
 
-  const data: UpdateData = {
-    name: req.body.name,
-    lastName: req.body.lastName,
-    profilePic: req.body.profilePic,
-    birthdate: new Date(req.body.birthdate)              
-  };
+  const data = req.body;
+
+  console.log(data);
 
   try {
     const updatedUser = await updateUser(filter, data, userRepository);
