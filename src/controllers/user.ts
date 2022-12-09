@@ -43,7 +43,7 @@ controller.authenticate = async (req: Request, res: Response): Promise<void> => 
 
 controller.getById = async (req: Request, res: Response): Promise<void> => {
   const userId = req.params.userId;
-  if (!isValidId(userId)){
+  if (!userId || !isValidId(userId)){
     res.status(400).send('Invalid user ID');
     return;
   }
@@ -97,7 +97,7 @@ controller.add = async (req: Request, res: Response): Promise<void> => {
 controller.deleteById = async (req: Request, res: Response): Promise<void> => {
   const userRepository = new UserRepositoryMongo();
   const userId = req.params.userId;
-  if (!isValidId(userId)){
+  if (!userId || !isValidId(userId)){
     res.status(400).send('Invalid user ID');
     return;
   }
@@ -130,7 +130,7 @@ export interface UpdateData {
 controller.updateById = async (req: Request, res: Response): Promise<void> => {
   const userRepository = new UserRepositoryMongo();
   const userId = req.params.userId;
-  if (!isValidId(userId)){
+  if (!userId || !isValidId(userId)){
     res.status(400).send('Invalid user ID');
     return;
   }
