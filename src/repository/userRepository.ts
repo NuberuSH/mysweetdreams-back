@@ -1,5 +1,5 @@
 import { User, UserModel } from '../models/user';
-import { UpdateFilter, UpdateData } from '../controllers/user';
+import { UpdateFilter } from '../controllers/user';
 
 export interface UserRepository {
   findAllUsers(): Promise<UserModel[]>;
@@ -7,7 +7,7 @@ export interface UserRepository {
   findUserByEmail(email: string): Promise<UserModel[]>;
   addNewUser(user: any): Promise<UserModel | string>;
   deleteUserById(Id: string): Promise<UserModel | null>;
-  updateUser(filter: UpdateFilter, update: UpdateData): Promise<UserModel | null>;
+  updateUser(filter: UpdateFilter, update: any): Promise<UserModel | null>;
 }
 
 export class UserRepositoryMongo implements UserRepository{
@@ -42,7 +42,7 @@ export class UserRepositoryMongo implements UserRepository{
     return User.findByIdAndRemove(Id);
   }
 
-  public async updateUser(filter: UpdateFilter, update: UpdateData): Promise<UserModel | null>{
+  public async updateUser(filter: UpdateFilter, update: any): Promise<UserModel | null>{
     return User.findOneAndUpdate(filter, update, { new: true });   
   }
 }

@@ -1,6 +1,6 @@
 import { UserModel } from '../models/user';
 import { UserRepository } from '../repository/userRepository';
-import { UpdateFilter, UpdateData } from '../controllers/user';
+import { UpdateFilter } from '../controllers/user';
 
 export const addNewUser = async (newUser: any, repository: UserRepository): Promise<UserModel | string> => {
 
@@ -55,7 +55,7 @@ export const authenticateUser = async (user: any, repository: UserRepository): P
   return false;
 };
 
-export const updateUser = async (filter: UpdateFilter, data: UpdateData, repository: UserRepository): Promise<UserModel | string> => {
+export const updateUser = async (filter: UpdateFilter, data: any, repository: UserRepository): Promise<UserModel | string> => {
   const updatedUser = await repository.updateUser(filter, data);
   if (updatedUser === null){
     return 'User not found';
