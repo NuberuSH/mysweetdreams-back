@@ -46,7 +46,7 @@ export const authenticateUser = async (user: any, repository: UserRepository): P
   if (userFound.length === 0){
     return false;
   }
-  if (user.password === userFound[0].password){
+  if (user.password === userFound[0].password){ //TODO hay que usar bcryptjs
     return {
       userId: userFound[0]._id,
       message: 'Ok'
