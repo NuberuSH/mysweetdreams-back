@@ -1,12 +1,19 @@
 import mongoose from 'mongoose';
+import * as dotenv from 'dotenv';
 
-const MONGO_URL = 'mongodb://127.0.0.1:27017/sd-bd';
+dotenv.config();
+
+const MONGO_URL = process.env.MONGO_URL;
 
 
 const startDatabase = async (): Promise<void> => {
   try {
-    await mongoose.connect(MONGO_URL);
-    console.log('Succesfully conected to database');
+    if (!MONGO_URL){
+      throw new Error('Missing DB URL');
+    } else {
+      await mongoose.connect(MONGO_URL);
+      console.log('Succesfully conected to database');
+    }
   } catch (error){
     console.log('Error conecting to database');
   }

@@ -4,9 +4,11 @@
 import { Request, Response } from 'express';
 import { User } from '../models/user';
 import { UserRepositoryMongo } from '../repository/userRepository';
-import { addNewUser, findAllUsers, findUserById, deleteUserById, authenticateUser, updateUser } from '../services/user';
-import bcryptjs from 'bcryptjs';
+import { addNewUser, findAllUsers, findUserById, deleteUserById, updateUser } from '../services/user';
 import isValidId from '../scripts/checkId';
+import { encryptPassword } from '../helpers/encryptPassword';
+import { filterUserModel } from '../helpers/filterModels';
+import { filterUser } from '../helpers/filterUser';
 
 const controller: any = {}; //He puesto any porque si no me decia que "getUsers property does not exist on type {}" , habria que poner una interfaz
 
@@ -26,20 +28,20 @@ controller.getAll = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-controller.authenticate = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const userRepository = new UserRepositoryMongo();
-    const autheticated = await authenticateUser(req.body, userRepository);
-    if (autheticated){
-      res.status(200).json(autheticated);
-    } else {
-      res.status(400).send('Invalid user/password');
-    }
+// controller.authenticate = async (req: Request, res: Response): Promise<void> => {
+//   try {
+//     const userRepository = new UserRepositoryMongo();
+//     const autheticated = await authenticateUser(req.body, userRepository);
+//     if (autheticated){
+//       res.status(200).json(autheticated);
+//     } else {
+//       res.status(400).send('Invalid user/password');
+//     }
 
-  } catch (err){
-    res.status(500).send(err);
-  }
-};
+//   } catch (err){
+//     res.status(500).send(err);
+//   }
+// };
 
 controller.getById = async (req: Request, res: Response): Promise<void> => {
   const userId = req.params.userId;
@@ -50,8 +52,15 @@ controller.getById = async (req: Request, res: Response): Promise<void> => {
   try {
     const userRepository = new UserRepositoryMongo();
     const user = await findUserById(userId, userRepository);
-    
-    res.status(200).json(user);
+    console.log(user);
+    if (!user){
+      res.status(400).send('User not found');
+      return;
+    }
+    //Filter the user JSON
+    const filteredUser = filterUser(user, filterUserModel);
+
+    res.status(200).json(filteredUser);
   } catch (err) {
     res.status(500).send('Error');
   }
@@ -78,7 +87,7 @@ controller.add = async (req: Request, res: Response): Promise<void> => {
     }
 
     
-    //user.password = await bcryptjs.hash(user.password, 8);
+    user.password = encryptPassword(user.password);
 
     const userRepository = new UserRepositoryMongo();
     const addedUser = await addNewUser(user, userRepository);
