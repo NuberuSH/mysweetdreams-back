@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  backend:
+    container_name: msd-backend
+    image: 'bogallo/mysweetdreams:latest'
+    ports:
+        - '3000:3000'
+    environment:
+        -  MONGO_IP=database #database make reference to the database ip service
+    depends_on:
+        - 'database'
+
+  database:
+    container_name: msd-database
+    image: 'mongo'
+    volumes:
+        - /mongo-data:/data/db
+    ports:
+        - '27017:27017' #27017 default port for mongodb

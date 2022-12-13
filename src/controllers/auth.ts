@@ -11,6 +11,7 @@ controller.login = async (req: Request, res: Response) => {
     const userRepository = new UserRepositoryMongo();
     const authenticatedUser = await authenticateUser(user, userRepository);
     if (authenticatedUser){
+      res.cookie('x-token', authenticatedUser.token);
       res.status(200).json(authenticatedUser);
     } else {
       res.status(400).send('Invalid user/password');
