@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import userController from '../controllers/user';
-import { validateUser } from '../middlewares/validateUser';
+import { validateAuthUser } from '../middlewares/validateAuthUser';
 
 
 const router: Router = Router();
@@ -11,12 +11,10 @@ const router: Router = Router();
 
 
 router.get('/', userController.getAll);
-router.get('/:userId', [validateUser], userController.getById);
+router.get('/myUser', [validateAuthUser], userController.getById);
 
 router.post('/add', userController.add);
 
-router.patch('/:userId', [validateUser], userController.updateById);
-
-router.delete('/:userId', [validateUser], userController.deleteById);
-
+router.patch('/myUser', [validateAuthUser], userController.updateById);
+router.delete('/myUser', [validateAuthUser], userController.deleteById);
 export default router;

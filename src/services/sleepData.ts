@@ -9,8 +9,8 @@ export const getAllUserData = async (userId: string, dataRepositoy: SleepDataRep
   return data;
 };
 
-export const addData = async (data: SleepDataModel, repository: SleepDataRepository): Promise<SleepDataModel | null> => {
-  const addedData = await repository.addDay(data);
+export const addData = async (userId: string, data: SleepDataModel, repository: SleepDataRepository): Promise<SleepDataModel | null> => {
+  const addedData = await repository.addDay(userId, data);
   return addedData;
 };
 

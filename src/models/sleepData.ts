@@ -37,7 +37,7 @@ const sleepDataSchema: Schema = new Schema({
 });
 
 export interface SleepDataModel extends Document {
-    userId: mongoose.Types.ObjectId,
+    userId: string,
     day: Date,
     start: Date,
     end: Date,

@@ -5,14 +5,11 @@ interface JwtPayload {
   userId: string
 }
 
-export const validateUser = (req: Request, res: Response, next: NextFunction) => {
-  console.log('Entra');
+export const validateAuthUser = (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies['x-token'];
-  console.log('AQUIIII');
   console.log(token);
 
   if (!token) {
-    console.log('Sin token');
     res.status(401).json({
       msg: 'Invalid permission'
     });
@@ -31,13 +28,9 @@ export const validateUser = (req: Request, res: Response, next: NextFunction) =>
 
     const payload = jwt.verify(token, secretOrPrivateKey) as JwtPayload;
     
-    // if (req.body.userId != payload.userId){
-    //   res.status(400).json({
-    //     msg: 'Invalid user'
-    //   });
-    // }
+    console.log(req.body.userId);
+    console.log(payload.userId);
 
-    req.body.userId = payload.userId;
     next();
 
   } catch (err){

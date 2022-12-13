@@ -1,12 +1,18 @@
 import { Request, Response } from 'express';
 import { SleepDataRepositoryMongo } from '../repository/sleepDataRepository';
 import { addData, getAllUserData, getDataByDay, getDataByWeek, getDataByMonth, getAverageWeekSleepHours, getAverageMonthSleepHours } from '../services/sleepData';
+import { getTokenUserId } from '../helpers/getTokenUserId';
 import isValidId from '../scripts/checkId';
 
 const controller: any = {};
 
 controller.getAllUserData = async (req: Request, res: Response): Promise<void> => {
-  const userId = req.params.userId;
+  //const userId = req.params.userId;
+
+  //Si esta autenticado, solo puede obtener los datos del usuario autenticado
+  const token = req.cookies['x-token'];
+  const userId = getTokenUserId(token);
+
   if (!userId || !isValidId(userId)){
     res.status(400).send('Invalid User ID');
     return;
@@ -24,9 +30,19 @@ controller.getAllUserData = async (req: Request, res: Response): Promise<void> =
 
 controller.add = async (req: Request, res: Response) => {
   const dataRepository = new SleepDataRepositoryMongo();
+
+  //Si esta autenticado, solo puede obtener los datos del usuario autenticado
+  const token = req.cookies['x-token'];
+  const userId = getTokenUserId(token);
+
+  if (!userId || !isValidId(userId)){
+    res.status(400).send('Invalid user ID');
+    return;
+  }
+
   const data = req.body;
   try {
-    const addedData = await addData(data, dataRepository);
+    const addedData = await addData(userId, data, dataRepository);
     res.status(200).json(addedData);
     return;
   } catch (err) {
@@ -36,7 +52,12 @@ controller.add = async (req: Request, res: Response) => {
 
 controller.getDataByDay = async (req: Request, res: Response) => {
   const dataRepository = new SleepDataRepositoryMongo();
-  const { day, userId } = req.body;
+  //Si esta autenticado, solo puede obtener los datos del usuario autenticado
+  const token = req.cookies['x-token'];
+  const userId = getTokenUserId(token);
+
+  const { day } = req.body;
+
   if (!userId || !isValidId(userId)){
     res.status(400).send('Invalid user ID');
     return;
@@ -53,7 +74,13 @@ controller.getDataByDay = async (req: Request, res: Response) => {
 
 controller.getDataByWeek = async (req: Request, res: Response) => {
   const dataRepository = new SleepDataRepositoryMongo();
-  const { userId, day } = req.body;
+
+  //Si esta autenticado, solo puede obtener los datos del usuario autenticado
+  const token = req.cookies['x-token'];
+  const userId = getTokenUserId(token);
+
+  const { day } = req.body;
+
   if (!userId || !isValidId(userId)){
     res.status(400).send('Invalid user ID');
     return;
@@ -68,7 +95,13 @@ controller.getDataByWeek = async (req: Request, res: Response) => {
 
 controller.getDataByMonth = async (req: Request, res: Response) => {
   const dataRepository = new SleepDataRepositoryMongo();
-  const { userId, day } = req.body;
+
+  //Si esta autenticado, solo puede obtener los datos del usuario autenticado
+  const token = req.cookies['x-token'];
+  const userId = getTokenUserId(token);
+
+  const { day } = req.body;
+
   if (!userId || !isValidId(userId)){
     res.status(400).send('Invalid user ID');
     return;
@@ -84,7 +117,13 @@ controller.getDataByMonth = async (req: Request, res: Response) => {
 
 controller.getAverageWeekSleepHours = async (req: Request, res: Response) => {
   const dataRepository = new SleepDataRepositoryMongo();
-  const { userId, day } = req.body;
+
+  //Si esta autenticado, solo puede obtener los datos del usuario autenticado
+  const token = req.cookies['x-token'];
+  const userId = getTokenUserId(token);
+
+  const { day } = req.body;
+
   if (!userId || !isValidId(userId)){
     res.status(400).send('Invalid user ID');
     return;
@@ -102,7 +141,12 @@ controller.getAverageWeekSleepHours = async (req: Request, res: Response) => {
 
 controller.getAverageMonthSleepHours = async (req: Request, res: Response) => {
   const dataRepository = new SleepDataRepositoryMongo();
-  const { userId, day } = req.body;
+
+  //Si esta autenticado, solo puede obtener los datos del usuario autenticado
+  const token = req.cookies['x-token'];
+  const userId = getTokenUserId(token);
+
+  const { day } = req.body;
   if (!userId || !isValidId(userId)){
     res.status(400).send('Invalid user ID');
     return;
