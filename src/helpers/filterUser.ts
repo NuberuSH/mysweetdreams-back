@@ -6,6 +6,6 @@ export const filterUser = (user: UserModel, filter: string[]) => {
   filter.forEach((field) => {
     filtered[field] = user[field];
   });
-  
+
   return filtered;
 };

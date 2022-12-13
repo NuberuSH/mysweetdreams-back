@@ -1,2 +1,2 @@
-export const filterUserModel = ['_id', 'name', 'birthdate', 'updated','created'];
+export const filterUserModel = ['_id', 'name', 'email', 'profilePic', 'birthdate', 'updated', 'created'];
 
