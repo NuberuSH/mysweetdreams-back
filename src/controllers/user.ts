@@ -24,7 +24,9 @@ controller.getAll = async (req: Request, res: Response): Promise<void> => {
   try {
     const users = await findAllUsers(userRepository);
     const filteredUsers = users?.map((user) =>{
-      filterUser(user, filterUserModel);
+      const filteredUser = filterUser(user, filterUserModel);
+      return filteredUser;
+      
     });
     res.status(200).json(filteredUsers);
     return;
