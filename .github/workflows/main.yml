@@ -31,10 +31,11 @@ jobs:
      steps:
        - name: Setup SSH Keys and known_hosts
          run: |
-             ssh-add <<< ${{ secrets.SSH_PRIVATE_KEY }}
+             touch ~/.ssh/clave
+             cat ${{ secrets.SSH_PRIVATE_KEY }} > ~/.ssh/clave
        - name: SSH connection
          run: |
-          ssh root@${{ secrets.IP_DROPLET }} -C
+          ssh -i ~/.ssh/clave root@${{ secrets.IP_DROPLET }} -C
        - name: Restart docker-compose
          run: |
           docker compose down
