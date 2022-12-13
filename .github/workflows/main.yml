@@ -31,7 +31,7 @@ jobs:
      steps:
       - name: SSH connection
         run: |
-          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} root@${{ secrets.DROPLET_IP }} -C
+          ssh -i "${{ secrets.SSH_PRIVATE_KEY }}" root@${{ secrets.DROPLET_IP }} -C
       - name: Restart docker-compose
         run: |
           docker compose down
