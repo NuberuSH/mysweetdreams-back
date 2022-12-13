@@ -1,4 +1,4 @@
-name: dockefile-build
+name: dockerfile-build
 
 on:
   push:
