@@ -57,6 +57,7 @@ const configureExpress = async (): Promise<void> => {
   app.use(compression());
   app.use('/auth', authRoutes);
   app.use('/users', usersRoutes);
+  app.use(validateAuthUser);
   app.use('/data', sleepDataRoutes);
   return;
 };
