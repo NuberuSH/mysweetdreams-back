@@ -98,7 +98,7 @@ controller.add = async (req: Request, res: Response): Promise<void> => {
     }
     if (typeof(addedUser) == 'object'){
       const filteredUser = filterUser(addedUser, filterUserModel);
-      const token = generateJWT(addedUser._id);
+      const token = await generateJWT(addedUser._id);
       res.cookie('x-token', token);
       res.status(200).json(filteredUser);
       return;
