@@ -25,3 +25,13 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/msd-express-mongo:latest
+  integration:
+     needs: build
+     runs-on: ubuntu-latest
+     steps:
+      - name: SSH connection
+        run: |
+          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} root@${{ secrets.DROPLET_IP }} -C
+      - name: Restart docker-compose
+        run: |
+          docker compose down
