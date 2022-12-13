@@ -30,14 +30,11 @@ jobs:
      runs-on: ubuntu-latest
      steps:
        - name: Setup SSH Keys and known_hosts
-         env: 
-            SSH_AUTH_SOCK: /tmp/ssh_agent.sock
          run: |
-             ssh-agent -a $SSH_AUTH_SOCK > /dev/null
              ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
        - name: SSH connection
          run: |
-          ssh root@${{ secrets.DROPLET_IP }} -C
+          ssh root@${{ secrets.IP_DROPLET }} -C
        - name: Restart docker-compose
          run: |
           docker compose down
