@@ -10,6 +10,7 @@ import { encryptPassword } from '../helpers/encryptPassword';
 import { filterUserModel } from '../helpers/filterModels';
 import { filterUser } from '../helpers/filterUser';
 import { getTokenUserId } from '../helpers/getTokenUserId';
+import { generateJWT } from '../helpers/generateJWT';
 
 
 const controller: any = {}; //He puesto any porque si no me decia que "getUsers property does not exist on type {}" , habria que poner una interfaz
@@ -95,6 +96,8 @@ controller.add = async (req: Request, res: Response): Promise<void> => {
     }
     if (typeof(addedUser) == 'object'){
       const filteredUser = filterUser(addedUser, filterUserModel);
+      const token = generateJWT(addedUser._id);
+      res.cookie('x-token', token);
       res.status(200).json(filteredUser);
       return;
     }
