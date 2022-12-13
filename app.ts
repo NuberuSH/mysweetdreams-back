@@ -5,11 +5,14 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import compression from 'compression';
+import cookieParser from 'cookie-parser';
 import { errorHandler } from './src/middlewares/errorHandler';
 import authRoutes from './src/routes/auth';
 import usersRoutes from './src/routes/user';
 import sleepDataRoutes from './src/routes/sleepData';
 import startDatabase from './src/connection';
+import { validateUser } from './src/middlewares/validateUser';
+import { allowCredentials } from './src/middlewares/allowCredentials';
 
 dotenv.config();
 
@@ -20,22 +23,22 @@ const corsOptions: cors.CorsOptions = {
   optionsSuccessStatus: 200,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 
-  credentials: true
+  credentials: true,
 
-  // exposedHeaders: [
+  exposedHeaders: [
 
-  //     "x-auth-token",
+    'x-token',
 
-  //     "content-type",
+    'content-type',
 
-  //     "X-Requested-With",
+    'X-Requested-With',
 
-  //     "Authorization",
+    'Authorization',
 
-  //     "Accept",
+    'Accept',
 
-  //     "Origin",
-  //   ]
+    'Origin'
+  ]
 };
 
 
@@ -47,6 +50,11 @@ const configureExpress = async (): Promise<void> => {
   }));
   app.use(errorHandler);
   app.use(cors(corsOptions));
+  app.use(cookieParser());
+  app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
+    next();
+  });
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   app.use(compression());

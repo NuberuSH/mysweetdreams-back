@@ -28,20 +28,6 @@ controller.getAll = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-// controller.authenticate = async (req: Request, res: Response): Promise<void> => {
-//   try {
-//     const userRepository = new UserRepositoryMongo();
-//     const autheticated = await authenticateUser(req.body, userRepository);
-//     if (autheticated){
-//       res.status(200).json(autheticated);
-//     } else {
-//       res.status(400).send('Invalid user/password');
-//     }
-
-//   } catch (err){
-//     res.status(500).send(err);
-//   }
-// };
 
 controller.getById = async (req: Request, res: Response): Promise<void> => {
   const userId = req.params.userId;
