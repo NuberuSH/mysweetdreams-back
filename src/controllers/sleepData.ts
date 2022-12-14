@@ -6,12 +6,14 @@ import isValidId from '../scripts/checkId';
 
 const controller: any = {};
 
-controller.getAllUserData = async (req: Request, res: Response): Promise<void> => {
+controller.getAllUserData = async (req: any, res: Response): Promise<void> => {
   //const userId = req.params.userId;
 
   //Si esta autenticado, solo puede obtener los datos del usuario autenticado
-  const token = req.cookies['x-token'];
-  const userId = getTokenUserId(token);
+  // const token = req.cookies['x-token'];
+  // const userId = getTokenUserId(token);
+
+  const userId = req.userId;
 
   if (!userId || !isValidId(userId)){
     res.status(400).send('Invalid User ID');
@@ -28,12 +30,14 @@ controller.getAllUserData = async (req: Request, res: Response): Promise<void> =
   }
 };
 
-controller.add = async (req: Request, res: Response) => {
+controller.add = async (req: any, res: Response) => {
   const dataRepository = new SleepDataRepositoryMongo();
 
   //Si esta autenticado, solo puede obtener los datos del usuario autenticado
-  const token = req.cookies['x-token'];
-  const userId = getTokenUserId(token);
+  // const token = req.cookies['x-token'];
+  // const userId = getTokenUserId(token);
+
+  const userId = req.userId;
 
   if (!userId || !isValidId(userId)){
     res.status(400).send('Invalid user ID');
@@ -50,11 +54,13 @@ controller.add = async (req: Request, res: Response) => {
   }
 };
 
-controller.getDataByDay = async (req: Request, res: Response) => {
+controller.getDataByDay = async (req: any, res: Response) => {
   const dataRepository = new SleepDataRepositoryMongo();
   //Si esta autenticado, solo puede obtener los datos del usuario autenticado
-  const token = req.cookies['x-token'];
-  const userId = getTokenUserId(token);
+  // const token = req.cookies['x-token'];
+  // const userId = getTokenUserId(token);
+
+  const userId = req.userId;
 
   const { day } = req.body;
 
@@ -72,12 +78,14 @@ controller.getDataByDay = async (req: Request, res: Response) => {
   }
 };
 
-controller.getDataByWeek = async (req: Request, res: Response) => {
+controller.getDataByWeek = async (req: any, res: Response) => {
   const dataRepository = new SleepDataRepositoryMongo();
 
   //Si esta autenticado, solo puede obtener los datos del usuario autenticado
-  const token = req.cookies['x-token'];
-  const userId = getTokenUserId(token);
+  // const token = req.cookies['x-token'];
+  // const userId = getTokenUserId(token);
+
+  const userId = req.userId;
 
   const { day } = req.body;
 
@@ -93,12 +101,14 @@ controller.getDataByWeek = async (req: Request, res: Response) => {
   }
 };
 
-controller.getDataByMonth = async (req: Request, res: Response) => {
+controller.getDataByMonth = async (req: any, res: Response) => {
   const dataRepository = new SleepDataRepositoryMongo();
 
   //Si esta autenticado, solo puede obtener los datos del usuario autenticado
-  const token = req.cookies['x-token'];
-  const userId = getTokenUserId(token);
+  // const token = req.cookies['x-token'];
+  // const userId = getTokenUserId(token);
+
+  const userId = req.userId;
 
   const { day } = req.body;
 
@@ -115,12 +125,14 @@ controller.getDataByMonth = async (req: Request, res: Response) => {
 };
 
 
-controller.getAverageWeekSleepHours = async (req: Request, res: Response) => {
+controller.getAverageWeekSleepHours = async (req: any, res: Response) => {
   const dataRepository = new SleepDataRepositoryMongo();
 
   //Si esta autenticado, solo puede obtener los datos del usuario autenticado
-  const token = req.cookies['x-token'];
-  const userId = getTokenUserId(token);
+  // const token = req.cookies['x-token'];
+  // const userId = getTokenUserId(token);
+
+  const userId = req.userId;
 
   const { day } = req.body;
 
@@ -139,12 +151,14 @@ controller.getAverageWeekSleepHours = async (req: Request, res: Response) => {
 };
 
 
-controller.getAverageMonthSleepHours = async (req: Request, res: Response) => {
+controller.getAverageMonthSleepHours = async (req: any, res: Response) => {
   const dataRepository = new SleepDataRepositoryMongo();
 
   //Si esta autenticado, solo puede obtener los datos del usuario autenticado
-  const token = req.cookies['x-token'];
-  const userId = getTokenUserId(token);
+  // const token = req.cookies['x-token'];
+  // const userId = getTokenUserId(token);
+
+  const userId = req.userId;
 
   const { day } = req.body;
   if (!userId || !isValidId(userId)){
