@@ -41,4 +41,4 @@ jobs:
     # private ssh key registered on the server
           private_key:  ${{ secrets.SSH_PRIVATE_KEY }}
     # command to be executed
-          command: docker compose down && docker compose up -d
+          command: echo ${{ secrets.DEVELOPER_PASS }} | sudo -S docker compose down && docker compose up -d
