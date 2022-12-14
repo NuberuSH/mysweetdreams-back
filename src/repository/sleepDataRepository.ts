@@ -5,7 +5,7 @@ import { Month } from '../scripts/getMonth';
 
 export interface SleepDataRepository {
     getAll(userId: string): Promise<SleepDataModel[]>;
-    addDay(data: SleepDataModel): Promise<SleepDataModel>;
+    addDay(userId: string, data: SleepDataModel): Promise<SleepDataModel>;
     getByDay(userId: String, day: Date): Promise<SleepDataModel[]>;
     getByWeek(UserId: String, week: Week): Promise<SleepDataModel[]>;
     getByMonth(userId: String, month: Month): Promise<SleepDataModel[]>;
@@ -18,7 +18,8 @@ export class SleepDataRepositoryMongo {
     return data;
   }
 
-  public async addDay(data: SleepDataModel): Promise<SleepDataModel> {
+  public async addDay(userId: string, data: SleepDataModel): Promise<SleepDataModel> {
+    data.userId = userId;
     const addedData = SleepData.create(data);
     return addedData;
   }
