@@ -5,7 +5,7 @@ interface JwtPayload {
   userId: string
 }
 
-export const validateAuthUser = (req: Request, res: Response, next: NextFunction) => {
+export const validateAuthUser = (req: any, res: Response, next: NextFunction) => {
   const token = req.cookies['x-token'];
   console.log(token);
 
@@ -31,6 +31,7 @@ export const validateAuthUser = (req: Request, res: Response, next: NextFunction
     console.log(req.body.userId);
     console.log(payload.userId);
 
+    req.userId = payload.userId;
     next();
 
   } catch (err){
