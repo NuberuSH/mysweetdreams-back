@@ -37,7 +37,7 @@ jobs:
     # hostname / IP of the server
           host:  ${{ secrets.IP_DROPLET }}
     # user of the server
-          user: root
+          user: developer
     # private ssh key registered on the server
           private_key:  ${{ secrets.SSH_PRIVATE_KEY }}
     # command to be executed
