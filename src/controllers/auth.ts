@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { PasswordBcrypt } from '../helpers/PasswordBcrypt';
 import { UserRepositoryMongo } from '../repository/userRepository';
 import { authenticateUser } from '../services/auth';
 
@@ -9,7 +10,8 @@ controller.login = async (req: Request, res: Response) => {
   try {
     const user = req.body;
     const userRepository = new UserRepositoryMongo();
-    const authenticatedUser = await authenticateUser(user, userRepository);
+    const passwordHelper = new PasswordBcrypt();
+    const authenticatedUser = await authenticateUser(user, userRepository, passwordHelper);
     if (authenticatedUser){
       res.cookie('x-token', authenticatedUser.token);
       res.status(200).json(authenticatedUser);

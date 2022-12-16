@@ -6,11 +6,10 @@ import { User } from '../models/user';
 import { UserRepositoryMongo } from '../repository/userRepository';
 import { addNewUser, findAllUsers, findUserById, deleteUserById, updateUser } from '../services/user';
 import isValidId from '../scripts/checkId';
-import { encryptPassword } from '../helpers/encryptPassword';
 import { filterUserModel } from '../helpers/filterModels';
 import { filterUser } from '../helpers/filterUser';
-import { getTokenUserId } from '../helpers/getTokenUserId';
 import { generateJWT } from '../helpers/generateJWT';
+import { PasswordBcrypt } from '../helpers/PasswordBcrypt';
 
 
 const controller: any = {}; //He puesto any porque si no me decia que "getUsers property does not exist on type {}" , habria que poner una interfaz
@@ -38,12 +37,6 @@ controller.getAll = async (req: Request, res: Response): Promise<void> => {
 
 
 controller.getById = async (req: any, res: Response): Promise<void> => {
-  // const userId = req.params.userId;
-  // const userId = req.body.userId;
-
-  //Si esta autenticado al entar en el /me se le devuelven los datos del user autenticado
-  //const token = req.cookies['x-token'];
-  //const userId = getTokenUserId(token);
 
   const userId = req.userId;
 
@@ -70,6 +63,7 @@ controller.getById = async (req: any, res: Response): Promise<void> => {
 };
 
 controller.add = async (req: Request, res: Response): Promise<void> => {
+  const passwordHelper = new PasswordBcrypt();
   try {
     const user = new User(req.body);
     if (!user){
@@ -90,10 +84,11 @@ controller.add = async (req: Request, res: Response): Promise<void> => {
     }
 
     
-    user.password = encryptPassword(user.password);
+    user.password = passwordHelper.encryp(user.password);
 
     const userRepository = new UserRepositoryMongo();
     const addedUser = await addNewUser(user, userRepository);
+
     if (addedUser === 'User already exists' || addedUser === 'Unexpected error'){
       res.status(401).send(addedUser);
       return;
@@ -116,15 +111,11 @@ controller.add = async (req: Request, res: Response): Promise<void> => {
 
 controller.deleteById = async (req: any, res: Response): Promise<void> => {
 
-  //Si esta autenticado, solo puede borrar el usuario que este en el token
-  // const token = req.cookies['x-token'];
-  // const userId = getTokenUserId(token);
 
   const userId = req.userId;
 
   const userRepository = new UserRepositoryMongo();
-  //const userId = req.params.userId;
-  //const userId = req.body.userId;
+
   if (!userId || !isValidId(userId)){
     res.status(400).send('Invalid user ID');
     return;
@@ -150,12 +141,6 @@ export interface UpdateFilter {
 
 controller.updateById = async (req: any, res: Response): Promise<void> => {
   const userRepository = new UserRepositoryMongo();
-  //const userId = req.params.userId;
-  //const userId = req.body.userId;
-
-  //Si esta autenticado, solo puede actualizar el usuario que este en el token
-  // const token = req.cookies['x-token'];
-  // const userId = getTokenUserId(token);
 
   const userId = req.userId;
 
@@ -177,6 +162,9 @@ controller.updateById = async (req: any, res: Response): Promise<void> => {
     
     if (updatedUser == 'User not found') {
       res.status(400).send('User not found');
+      return;
+    } else if (updatedUser == 'Id can\'t be updated'){
+      res.status(400).send('Id can\'t be updated');
       return;
     } else {   
       res.status(200).send('Ok');
