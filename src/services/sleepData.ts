@@ -6,6 +6,8 @@ import { Month, getMonth } from '../scripts/getMonth';
 
 export const getAllUserData = async (userId: string, dataRepositoy: SleepDataRepository): Promise<SleepDataModel[]> => {
   const data = await dataRepositoy.getAll(userId);
+  
+
   return data;
 };
 

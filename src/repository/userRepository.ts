@@ -5,9 +5,10 @@ export interface UserRepository {
   findAllUsers(): Promise<UserModel[]>;
   findUserById(Id: string): Promise<UserModel | null>;
   findUserByEmail(email: string): Promise<UserModel | null>;
-  addNewUser(user: any): Promise<UserModel | string>;
+  addNewUser(user: any): Promise<UserModel>;
   deleteUserById(Id: string): Promise<UserModel | null>;
   updateUser(filter: UpdateFilter, update: any): Promise<UserModel | null>;
+  userExists(userEmail: string): Promise<boolean>
 }
 
 export class UserRepositoryMongo implements UserRepository{
@@ -26,16 +27,13 @@ export class UserRepositoryMongo implements UserRepository{
     return user;
   }
 
-  public async addNewUser(user: any): Promise<UserModel | string>{
-    const newUser = new User(user);
-    try {
-      return await User.create(newUser);
-    } catch (err: any){
-      if (err.keyPattern.email === 1){
-        return 'User already exists';
-      }
-      return 'Unexpected error';
-    }
+  public async addNewUser(user: UserModel): Promise<UserModel>{
+    return await User.create(user);  
+  }
+
+  public async userExists(userEmail: string): Promise<boolean> {
+    const user = await User.findOne({ email: userEmail });
+    return user !== null;
   }
 
   public async deleteUserById(Id: string): Promise<UserModel | null>{
