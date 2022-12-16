@@ -4,9 +4,14 @@ import { UpdateFilter } from '../controllers/user';
 
 export const addNewUser = async (newUser: any, repository: UserRepository): Promise<UserModel | string> => {
 
+  const isUserExisting = await repository.userExists(newUser.email);
+
+  if (isUserExisting){
+    throw new Error('User already exists');
+  }
+
   const createdUser = await repository.addNewUser(newUser);
   return createdUser;
-  
 };
 
 export const findAllUsers = async (repository: UserRepository): Promise<UserModel[] | null> => {
@@ -39,22 +44,14 @@ export const deleteUserById = async (Id: string, repository: UserRepository) => 
   }
 };
 
-// export const authenticateUser = async (user: any, repository: UserRepository): Promise<any> => {
-//   const userFound = await repository.findUserByEmail(user.email);
-//   if (userFound.length === 0){
-//     return false;
-//   }
-//   if (user.password === userFound[0].password){ //TODO hay que usar bcryptjs
-//     return {
-//       userId: userFound[0]._id,
-//       message: 'Ok'
-//     };
-//   }
-//   return false;
-// };
 
 export const updateUser = async (filter: UpdateFilter, data: any, repository: UserRepository): Promise<UserModel | string> => {
   const updatedUser = await repository.updateUser(filter, data);
+
+  if (data.userId){
+    return 'Id can\'t be updated'; 
+  }
+
   if (updatedUser === null){
     return 'User not found';
   } else {    
