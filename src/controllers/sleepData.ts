@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { SleepDataRepositoryMongo } from '../repository/sleepDataRepository';
 import { addData, getAllUserData, getDataByDay, getDataByWeek, getDataByMonth, getAverageWeekSleepHours, getAverageMonthSleepHours } from '../services/sleepData';
-import { getTokenUserId } from '../helpers/getTokenUserId';
 import isValidId from '../scripts/checkId';
 
 const controller: any = {};
