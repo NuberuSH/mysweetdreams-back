@@ -1,17 +1,22 @@
 import { Request, Response } from 'express';
 import { SleepDataRepositoryMongo } from '../repository/sleepDataRepository';
 import { addData, getAllUserData, getDataByDay, getDataByWeek, getDataByMonth, getAverageWeekSleepHours, getAverageMonthSleepHours } from '../services/sleepData';
+import { getTokenUserId } from '../helpers/getTokenUserId';
 import isValidId from '../scripts/checkId';
 
 const controller: any = {};
 
-controller.getAllUserData = async (req: Request, res: Response): Promise<void> => {
-  const userId = req.params.userId;
+controller.getAllUserData = async (req: any, res: Response): Promise<void> => {
+
+  const userId = req.userId;
+  console.log(userId);
   if (!userId || !isValidId(userId)){
     res.status(400).send('Invalid User ID');
     return;
   }
+  
   const dataRepository = new SleepDataRepositoryMongo();
+
   try {
     const data = await getAllUserData(userId, dataRepository);
     res.status(200).json(data);
@@ -22,11 +27,23 @@ controller.getAllUserData = async (req: Request, res: Response): Promise<void> =
   }
 };
 
-controller.add = async (req: Request, res: Response) => {
+controller.add = async (req: any, res: Response) => {
   const dataRepository = new SleepDataRepositoryMongo();
+
+  const userId = req.userId;
+
+  if (!userId || !isValidId(userId)){
+    res.status(400).send('Invalid user ID');
+    return;
+  }
+  
   const data = req.body;
   try {
-    const addedData = await addData(data, dataRepository);
+    const addedData = await addData(userId, data, dataRepository);
+    if (typeof(data) === 'string'){
+      res.status(400).send(data);
+      return;
+    }
     res.status(200).json(addedData);
     return;
   } catch (err) {
@@ -34,15 +51,23 @@ controller.add = async (req: Request, res: Response) => {
   }
 };
 
-controller.getDataByDay = async (req: Request, res: Response) => {
+controller.getDataByDay = async (req: any, res: Response) => {
   const dataRepository = new SleepDataRepositoryMongo();
-  const { day, userId } = req.body;
+
+  const userId = req.userId;
+
+  const { day } = req.body;
+
   if (!userId || !isValidId(userId)){
     res.status(400).send('Invalid user ID');
     return;
   }
   try {
     const data = await getDataByDay(userId, day, dataRepository);
+    if (data === 'Invalid Date, please enter a valid date'){
+      res.status(400).send(data);
+      return;
+    }
     res.status(200).json(data);
     return;
   } catch (err) {
@@ -51,30 +76,47 @@ controller.getDataByDay = async (req: Request, res: Response) => {
   }
 };
 
-controller.getDataByWeek = async (req: Request, res: Response) => {
+controller.getDataByWeek = async (req: any, res: Response) => {
   const dataRepository = new SleepDataRepositoryMongo();
-  const { userId, day } = req.body;
+
+
+  const userId = req.userId;
+
+  const { day } = req.body;
+
   if (!userId || !isValidId(userId)){
     res.status(400).send('Invalid user ID');
     return;
   }
   try {
     const data = await getDataByWeek(userId, day, dataRepository);
+    if (data === 'Invalid Date, please enter a valid date'){
+      res.status(400).send(data);
+      return;
+    }
     res.status(200).json(data);
   } catch (err) {
     res.status(500).send('Error 500');
   }
 };
 
-controller.getDataByMonth = async (req: Request, res: Response) => {
+controller.getDataByMonth = async (req: any, res: Response) => {
   const dataRepository = new SleepDataRepositoryMongo();
-  const { userId, day } = req.body;
+
+  const userId = req.userId;
+
+  const { day } = req.body;
+
   if (!userId || !isValidId(userId)){
     res.status(400).send('Invalid user ID');
     return;
   }
   try {
     const data = await getDataByMonth(userId, day, dataRepository);
+    if (data === 'Invalid Date, please enter a valid date'){
+      res.status(400).send(data);
+      return;
+    }
     res.status(200).json(data);
   } catch (err) {
     res.status(500).send('Error 500');
@@ -82,9 +124,13 @@ controller.getDataByMonth = async (req: Request, res: Response) => {
 };
 
 
-controller.getAverageWeekSleepHours = async (req: Request, res: Response) => {
+controller.getAverageWeekSleepHours = async (req: any, res: Response) => {
   const dataRepository = new SleepDataRepositoryMongo();
-  const { userId, day } = req.body;
+
+  const userId = req.userId;
+
+  const { day } = req.body;
+
   if (!userId || !isValidId(userId)){
     res.status(400).send('Invalid user ID');
     return;
@@ -100,9 +146,13 @@ controller.getAverageWeekSleepHours = async (req: Request, res: Response) => {
 };
 
 
-controller.getAverageMonthSleepHours = async (req: Request, res: Response) => {
+controller.getAverageMonthSleepHours = async (req: any, res: Response) => {
   const dataRepository = new SleepDataRepositoryMongo();
-  const { userId, day } = req.body;
+
+
+  const userId = req.userId;
+
+  const { day } = req.body;
   if (!userId || !isValidId(userId)){
     res.status(400).send('Invalid user ID');
     return;

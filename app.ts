@@ -11,12 +11,9 @@ import authRoutes from './src/routes/auth';
 import usersRoutes from './src/routes/user';
 import sleepDataRoutes from './src/routes/sleepData';
 import startDatabase from './src/connection';
-import { validateUser } from './src/middlewares/validateUser';
-import { allowCredentials } from './src/middlewares/allowCredentials';
+import { validateAuthUser } from './src/middlewares/validateAuthUser';
 
 dotenv.config();
-
-const allowList: string[] = ['https://app.mysweetdreams.es'];
 
 const corsOptions: cors.CorsOptions = {
   origin: true,
@@ -52,7 +49,7 @@ const configureExpress = async (): Promise<void> => {
   app.use(cors(corsOptions));
   app.use(cookieParser());
   app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'https://app.mysweetdreams.es');
+    res.header('Access-Control-Allow-Origin', process.env.ALLOW_ORIGIN);
     next();
   });
   app.use(express.urlencoded({ extended: true }));
@@ -60,6 +57,7 @@ const configureExpress = async (): Promise<void> => {
   app.use(compression());
   app.use('/auth', authRoutes);
   app.use('/users', usersRoutes);
+  app.use(validateAuthUser);
   app.use('/data', sleepDataRoutes);
   return;
 };
