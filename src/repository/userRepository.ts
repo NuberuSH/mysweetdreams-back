@@ -11,6 +11,7 @@ export interface UserRepository {
   userExists(userEmail: string): Promise<boolean>;
 }
 
+
 export class UserRepositoryMongo implements UserRepository{
 
   public async findAllUsers(): Promise<UserModel[]>{

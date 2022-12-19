@@ -10,6 +10,7 @@ import { filterUserModel } from '../helpers/filterModels';
 import { filterUser } from '../helpers/filterUser';
 import { generateJWT } from '../helpers/generateJWT';
 import { PasswordBcrypt } from '../helpers/PasswordBcrypt';
+import { SleepDataRepositoryMongo } from '../repository/sleepDataRepository';
 
 
 const controller: any = {}; //He puesto any porque si no me decia que "getUsers property does not exist on type {}" , habria que poner una interfaz
@@ -115,17 +116,19 @@ controller.deleteById = async (req: any, res: Response): Promise<void> => {
   const userId = req.userId;
 
   const userRepository = new UserRepositoryMongo();
+  const sleepDataRepository = new SleepDataRepositoryMongo();
 
   if (!userId || !isValidId(userId)){
     res.status(400).send('Invalid user ID');
     return;
   }
   try {
-    const deletedUser = await deleteUserById(userId, userRepository);
+    const deletedUser = await deleteUserById(userId, userRepository, sleepDataRepository);
     if (deletedUser === 'User to delete not found'){
       res.status(400).send('User doesn\'t exists');
       return;
     }
+    //Quitar cookie
     res.status(200).send('OK');
     return;
   } catch (err) {
