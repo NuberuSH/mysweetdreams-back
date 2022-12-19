@@ -16,26 +16,26 @@ import { validateAuthUser } from './src/middlewares/validateAuthUser';
 dotenv.config();
 
 const corsOptions: cors.CorsOptions = {
-  origin: true,
+  origin: process.env.ALLOW_ORIGIN,
   optionsSuccessStatus: 200,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 
-  credentials: true,
+  credentials: true
 
-  exposedHeaders: [
+  // exposedHeaders: [
 
-    'x-token',
+  //   'x-token',
 
-    'content-type',
+  //   'content-type',
 
-    'X-Requested-With',
+  //   'X-Requested-With',
 
-    'Authorization',
+  //   'Authorization',
 
-    'Accept',
+  //   'Accept',
 
-    'Origin'
-  ]
+  //   'Origin'
+  // ]
 };
 
 
@@ -48,10 +48,6 @@ const configureExpress = async (): Promise<void> => {
   app.use(errorHandler);
   app.use(cors(corsOptions));
   app.use(cookieParser());
-  app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', process.env.ALLOW_ORIGIN);
-    next();
-  });
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   app.use(compression());
