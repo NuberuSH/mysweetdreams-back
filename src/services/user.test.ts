@@ -1,5 +1,6 @@
 import { addNewUser, deleteUserById, findAllUsers, findUserById, updateUser } from './user';
 import { UserRepository } from '../repository/userRepository';
+import { SleepDataRepository } from '../repository/sleepDataRepository';
 
 class UserRepositoryMocked implements UserRepository {
   public findAllUsers(): any {
@@ -30,6 +31,33 @@ class UserRepositoryMocked implements UserRepository {
     return false;
   }
 
+}
+
+class SleepDataRepositoryMocked implements SleepDataRepository {
+
+  public getAll(): any {
+    return [];
+  }
+
+  public addDay(): any {
+    return null;
+  }
+
+  public getByDay(): any {
+    return [];
+  }
+
+  public getByWeek(): any {
+    return [];
+  }
+
+  public getByMonth(): any {
+    return [];
+  }
+
+  public deleteByUserId(): any {
+    return [];
+  }
 }
 
 const user = {
@@ -80,21 +108,24 @@ describe('deleteUserById', () => {
 
   it('Should return an error Id is missing if there is no Id', async () =>{
     const userRepository = new UserRepositoryMocked();
+    const sleepDataRepository = new SleepDataRepositoryMocked();
     const id = '';
-    await expect(deleteUserById(id, userRepository)).rejects.toThrowError('Id is missing');
+    await expect(deleteUserById(id, userRepository, sleepDataRepository)).rejects.toThrowError('Id is missing');
   });
 
   it('Should return "User to delete not found" if there isnt a user with this Id in the database', async () => {
     const userRepository = new UserRepositoryMocked();
+    const sleepDataRepository = new SleepDataRepositoryMocked();
     const id = 'afkdj2jsla9sldis43udjsne';
-    await expect(deleteUserById(id, userRepository)).resolves.toEqual('User to delete not found');
+    await expect(deleteUserById(id, userRepository, sleepDataRepository)).resolves.toEqual('User to delete not found');
   });
 
   it('Should return a user', async () => {
     const userRepository = new UserRepositoryMocked();
+    const sleepDataRepository = new SleepDataRepositoryMocked();
     const id = 'afkdj2jsla9sldis43udjsne';
     userRepository.deleteUserById = jest.fn().mockResolvedValue(user);
-    await expect(deleteUserById(id, userRepository)).resolves.toEqual(user);
+    await expect(deleteUserById(id, userRepository, sleepDataRepository)).resolves.toEqual(user);
   });
 
 
@@ -158,7 +189,6 @@ describe('updateUser', () => {
       ...user,
       ...dataToUpdate
     };
-    console.log(updatedUser);
     userRepository.updateUser = jest.fn().mockResolvedValue(updatedUser);
     await expect(updateUser(filter, dataToUpdate, userRepository)).resolves.toBe(updatedUser);
   });

@@ -1,6 +1,7 @@
 import { UserModel } from '../models/user';
 import { UserRepository } from '../repository/userRepository';
 import { UpdateFilter } from '../controllers/user';
+import { SleepDataRepository } from '../repository/sleepDataRepository';
 
 export const addNewUser = async (newUser: any, repository: UserRepository): Promise<UserModel | string> => {
 
@@ -32,11 +33,13 @@ export const findUserById = async (Id: string, repository: UserRepository): Prom
 };
 
 
-export const deleteUserById = async (Id: string, repository: UserRepository) => {
+export const deleteUserById = async (Id: string, userRepository: UserRepository, sleepDataRepository: SleepDataRepository) => {
   if (!Id){
     throw new Error('Id is missing');
   }
-  const deletedUser = await repository.deleteUserById(Id);
+
+  const deletedUser = await userRepository.deleteUserById(Id);
+  await sleepDataRepository.deleteByUserId(Id);
   if (!deletedUser){
     return 'User to delete not found';
   } else {

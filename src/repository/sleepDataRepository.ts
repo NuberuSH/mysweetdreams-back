@@ -1,6 +1,7 @@
 import { SleepData, SleepDataModel } from '../models/sleepData';
 import { Week } from '../scripts/getWeek';
 import { Month } from '../scripts/getMonth';
+import { deleteUserById } from '../services/user';
 
 
 export interface SleepDataRepository {
@@ -9,6 +10,7 @@ export interface SleepDataRepository {
     getByDay(userId: String, day: Date): Promise<SleepDataModel[]>;
     getByWeek(UserId: String, week: Week): Promise<SleepDataModel[]>;
     getByMonth(userId: String, month: Month): Promise<SleepDataModel[]>;
+    deleteByUserId(userId: string): Promise<any>
 }
 
 export class SleepDataRepositoryMongo {
@@ -38,4 +40,10 @@ export class SleepDataRepositoryMongo {
     const data = await SleepData.find({ userId, day: { $gt: month.startDay, $lt: month.endDay } });
     return data;
   }
+
+  public async deleteByUserId(userId: string): Promise<any> {
+    const data = await SleepData.deleteMany({ userId });
+    return data;
+  }
+
 }

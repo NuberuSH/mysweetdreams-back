@@ -36,10 +36,14 @@ controller.add = async (req: any, res: Response) => {
     res.status(400).send('Invalid user ID');
     return;
   }
-
+  
   const data = req.body;
   try {
     const addedData = await addData(userId, data, dataRepository);
+    if (typeof(data) === 'string'){
+      res.status(400).send(data);
+      return;
+    }
     res.status(200).json(addedData);
     return;
   } catch (err) {
@@ -60,6 +64,10 @@ controller.getDataByDay = async (req: any, res: Response) => {
   }
   try {
     const data = await getDataByDay(userId, day, dataRepository);
+    if (data === 'Invalid Date, please enter a valid date'){
+      res.status(400).send(data);
+      return;
+    }
     res.status(200).json(data);
     return;
   } catch (err) {
@@ -82,6 +90,10 @@ controller.getDataByWeek = async (req: any, res: Response) => {
   }
   try {
     const data = await getDataByWeek(userId, day, dataRepository);
+    if (data === 'Invalid Date, please enter a valid date'){
+      res.status(400).send(data);
+      return;
+    }
     res.status(200).json(data);
   } catch (err) {
     res.status(500).send('Error 500');
@@ -101,6 +113,10 @@ controller.getDataByMonth = async (req: any, res: Response) => {
   }
   try {
     const data = await getDataByMonth(userId, day, dataRepository);
+    if (data === 'Invalid Date, please enter a valid date'){
+      res.status(400).send(data);
+      return;
+    }
     res.status(200).json(data);
   } catch (err) {
     res.status(500).send('Error 500');
@@ -110,10 +126,6 @@ controller.getDataByMonth = async (req: any, res: Response) => {
 
 controller.getAverageWeekSleepHours = async (req: any, res: Response) => {
   const dataRepository = new SleepDataRepositoryMongo();
-
-  //Si esta autenticado, solo puede obtener los datos del usuario autenticado
-  // const token = req.cookies['x-token'];
-  // const userId = getTokenUserId(token);
 
   const userId = req.userId;
 
@@ -137,9 +149,6 @@ controller.getAverageWeekSleepHours = async (req: any, res: Response) => {
 controller.getAverageMonthSleepHours = async (req: any, res: Response) => {
   const dataRepository = new SleepDataRepositoryMongo();
 
-  //Si esta autenticado, solo puede obtener los datos del usuario autenticado
-  // const token = req.cookies['x-token'];
-  // const userId = getTokenUserId(token);
 
   const userId = req.userId;
 
