@@ -48,6 +48,10 @@ const configureExpress = async (): Promise<void> => {
   app.use(errorHandler);
   app.use(cors(corsOptions));
   app.use(cookieParser());
+  app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', process.env.ALLOW_ORIGIN);
+    next();
+  });
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   app.use(compression());
