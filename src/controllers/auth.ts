@@ -14,7 +14,6 @@ controller.login = async (req: Request, res: Response) => {
     const authenticatedUser = await authenticateUser(user, userRepository, passwordHelper);
     if (authenticatedUser){
       res.cookie('x-token', authenticatedUser.token, {
-        domain: process.env.ALLOW_ORIGIN,
         httpOnly: true,
         signed: true,
         secure: true
