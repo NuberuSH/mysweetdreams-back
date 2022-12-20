@@ -13,7 +13,12 @@ controller.login = async (req: Request, res: Response) => {
     const passwordHelper = new PasswordBcrypt();
     const authenticatedUser = await authenticateUser(user, userRepository, passwordHelper);
     if (authenticatedUser){
-      res.cookie('x-token', authenticatedUser.token);
+      res.cookie('x-token', authenticatedUser.token, {
+        domain: process.env.ALLOW_ORIGIN,
+        httpOnly: true,
+        signed: true,
+        secure: true
+      });
       res.status(200).json(authenticatedUser);
     } else {
       res.status(400).send('Invalid user/password');
