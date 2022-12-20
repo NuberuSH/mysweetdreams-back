@@ -3,33 +3,33 @@ import mongoose, { Schema, Document, Model, model } from 'mongoose';
 const sleepDataSchema: Schema = new Schema({
   userId: {
     type: mongoose.Types.ObjectId,
-    require: true
+    required: true
   },
   day: {
     type: Date,
-    require: true,
+    required: true,
     default: new Date()
   },
   start: {
     type: Date,
-    require: true
+    required: true
   },
   end: {
     type: Date,
-    require: true
+    required: true
   },
   mark: {
     type: Number,
-    require: true
+    required: true
   },
   timesAwakened: {
     type: Number,
     default: 0,
-    require: true
+    required: true
   },
   restfulSleep: {
     type: Boolean,
-    require: true
+    required: true
   },
   notes: {
     type: String
