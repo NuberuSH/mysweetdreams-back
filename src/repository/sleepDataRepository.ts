@@ -20,7 +20,7 @@ export class SleepDataRepositoryMongo {
     return data;
   }
 
-  public async addDay(userId: string, data: SleepDataModel): Promise<SleepDataModel> {
+  public async addDay(userId: string, data: any): Promise<SleepDataModel> {
     data.userId = userId;
     const addedData = SleepData.create(data);
     return addedData;

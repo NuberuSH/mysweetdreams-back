@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import userController from '../controllers/user';
 import { validateAuthUser } from '../middlewares/validateAuthUser';
+import { addTestData } from '../scripts/addTestData';
 
 
 const router: Router = Router();
@@ -12,7 +13,6 @@ const router: Router = Router();
 
 router.get('/', userController.getAll);
 router.get('/myUser', [validateAuthUser], userController.getById);
-
 router.post('/add', userController.add);
 
 router.patch('/myUser', [validateAuthUser], userController.updateById);
