@@ -69,5 +69,4 @@ describe('authenticateUser', () => {
     await expect(authenticateUser(user, userRepository, passwordHelperFake)).resolves.toBe(false);
   });
 
-  //TODO The last test, if it goes all right
 });

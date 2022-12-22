@@ -8,9 +8,7 @@ const router: Router = Router();
 
 router.get('/day', sleepDataController.getDataByDay);
 router.get('/week', sleepDataController.getDataByWeek);
-router.get('/week/averageSleepHours', sleepDataController.getAverageWeekSleepHours);
 router.get('/month', sleepDataController.getDataByMonth);
-router.get('/month/averageSleepHours', sleepDataController.getAverageMonthSleepHours);
 
 
 router.get('/allData', sleepDataController.getAllUserData);

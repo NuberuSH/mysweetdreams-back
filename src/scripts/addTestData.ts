@@ -1,41 +1,49 @@
-import { UserModel } from '../models/user';
 import { UserRepositoryMongo } from '../repository/userRepository';
+import { faker } from '@faker-js/faker';
+import startDatabase from '../connection';
+import { SleepDataRepositoryMongo } from '../repository/sleepDataRepository';
+import { PasswordBcrypt } from '../helpers/PasswordBcrypt';
 
 const user = {
   name: 'userExample',
-  email: 'exampleAddData@example.com',
+  lastName: 'Johnson',
+  email: 'ExampleData@example.com',
   birthdate: new Date('1995-04-11'),
-  password: '123456'
+  password: 'Dani123456!'
 };
 
-// export interface SleepDataModel extends Document {
-//     userId: string,
-//     day: Date,
-//     start: Date,
-//     end: Date,
-//     mark: number,
-//     timesAwakened: number,
-//     restfulSleep: boolean,
-//     notes?: string
-// }
 
-
-function generateData(numberOfdata: number) {
-
+async function createRandomData(iterations: number, initialDay: Date) {
   const userRepository = new UserRepositoryMongo();
-  let startDay = new Date('2010-10-02');
-  userRepository.addNewUser(user);
-  const data = [];
-  const userId = userRepository.findUserByEmail(user.email);
-  const milisenconsInADay = 24 * 60 * 60 * 1000;
-  for (let i = 0; i < numberOfdata; i++) {
-    const startDayTimestamp = startDay.getTime() + milisenconsInADay;
-    console.log(startDayTimestamp);
-    startDay = new Date(startDayTimestamp);
-    console.log(startDay);
-    
-        
+  const sleepDataRepository = new SleepDataRepositoryMongo();
+  const passwordBcrypt = new PasswordBcrypt();
+  user.password = passwordBcrypt.encryp(user.password);
+  const userAdded = await userRepository.addNewUser(user);
+  console.log(userAdded);
+  const initialDayTimestamp = initialDay.getTime();
+  for (let i = 0; i < iterations; i++) {
+    const data = {
+      //userId: userAdded._id,
+      day: new Date(initialDayTimestamp + i * 24 * 60 * 60 * 1000),
+      start: faker.date.between(new Date(initialDayTimestamp + i * 24 * 60 * 60 * 1000), new Date(initialDayTimestamp + i * 24 * 60 * 60 * 1000 + 12 * 59 * 59 * 1000)),
+      end: faker.date.between(new Date(initialDayTimestamp + i * 24 * 60 * 60 * 1000 + 24 * 60 * 60 * 1000), new Date(initialDayTimestamp + i * 24 * 60 * 60 * 1000 + 24 * 60 * 60 * 1000 + 4 * 59 * 59 * 1000)),
+      mark: faker.random.numeric(1),
+      timesAwakened: faker.random.numeric(1),
+      restfulSleep: faker.datatype.boolean(),
+      notes: faker.lorem.sentence(5)
+    };
+    await sleepDataRepository.addDay(userAdded._id, data);
+    console.log(data);
   }
+
 }
 
-generateData(50);
+
+export const addTestData = async () => {
+  //await startDatabase();
+  await createRandomData(500, new Date(2020, 2, 4, 1, 0, 0));
+};
+
+addTestData();
+
+//createRandomData(40, new Date(2020, 2, 4, 1, 0, 0), 'aqw2we34r5t6y7654323er4');
