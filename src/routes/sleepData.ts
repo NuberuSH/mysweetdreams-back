@@ -6,12 +6,9 @@ import { validateAuthUser } from '../middlewares/validateAuthUser';
 const router: Router = Router();
 
 
-router.post('/day', sleepDataController.getDataByDay);
-router.post('/week', sleepDataController.getDataByWeek);
-router.get('/week/averageSleepHours', sleepDataController.getAverageWeekSleepHours);
-router.post('/month', sleepDataController.getDataByMonth);
-router.get('/month/averageSleepHours', sleepDataController.getAverageMonthSleepHours);
-
+router.get('/day', sleepDataController.getDataByDay);
+router.get('/week', sleepDataController.getDataByWeek);
+router.get('/month', sleepDataController.getDataByMonth);
 
 router.get('/allData', sleepDataController.getAllUserData);
 router.post('/', sleepDataController.add);

@@ -8,7 +8,7 @@ const controller: any = {};
 controller.getAllUserData = async (req: any, res: Response): Promise<void> => {
 
   const userId = req.userId;
-  console.log(userId);
+
   if (!userId || !isValidId(userId)){
     res.status(400).send('Invalid User ID');
     return;
@@ -37,6 +37,7 @@ controller.add = async (req: any, res: Response) => {
   }
   
   const data = req.body;
+  
   try {
     const addedData = await addData(userId, data, dataRepository);
     if (typeof(data) === 'string'){

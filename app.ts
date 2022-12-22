@@ -21,21 +21,6 @@ const corsOptions: cors.CorsOptions = {
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 
   credentials: true
-
-  // exposedHeaders: [
-
-  //   'x-token',
-
-  //   'content-type',
-
-  //   'X-Requested-With',
-
-  //   'Authorization',
-
-  //   'Accept',
-
-  //   'Origin'
-  // ]
 };
 
 

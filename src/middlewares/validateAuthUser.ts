@@ -28,10 +28,7 @@ export const validateAuthUser = (req: any, res: Response, next: NextFunction) =>
 
     const payload = jwt.verify(token, secretOrPrivateKey) as JwtPayload;
     
-
     req.userId = payload.userId;
-
-    console.log('Dentro del middleware el ID', req.userId);
     next();
 
   } catch (err){
