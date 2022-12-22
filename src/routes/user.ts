@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import userController from '../controllers/user';
 import { validateAuthUser } from '../middlewares/validateAuthUser';
-import { addTestData } from '../scripts/addTestData';
 
 
 const router: Router = Router();
