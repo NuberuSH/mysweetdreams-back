@@ -10,7 +10,6 @@ router.get('/day', sleepDataController.getDataByDay);
 router.get('/week', sleepDataController.getDataByWeek);
 router.get('/month', sleepDataController.getDataByMonth);
 
-
 router.get('/allData', sleepDataController.getAllUserData);
 router.post('/', sleepDataController.add);
 
